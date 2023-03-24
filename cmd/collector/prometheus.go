@@ -60,8 +60,10 @@ func CollectMetrics() {
 		}
 		cpuLimit := float32(temp)
 		log.Printf("TiDB Cluster Current Total CPU Limit(m): %f\n", cpuLimit)
+
 		cpuUsagePercentage := cpuUsage / cpuLimit
 		log.Printf("TiDB Cluster Current Total CPU Usage Percentage: %f\n", cpuUsagePercentage)
+
 		podCountArray := collector.ExtractValue(&podCountResult)
 		temp, err = utils.Sum(podCountArray)
 		if err != nil {
@@ -103,9 +105,11 @@ func CollectMetrics() {
 		r.Time = int64(start)
 		r.CpuUsage = cpuUsage
 		r.CpuLimit = cpuLimit
-		r.AvgCpu = avgCpuUsage
 		r.CpuUsagePercentage = cpuUsagePercentage
 		r.PodCount = int64(podCount)
+		r.AvgCpu = avgCpuUsage
+		r.StatementOps = statementOps
+		r.P99Latency = p99Latency
 		resArr = append(resArr, r)
 
 		start += 5

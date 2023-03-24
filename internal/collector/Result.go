@@ -9,13 +9,23 @@ import (
 	"time"
 )
 
+//		r.Time = int64(start)
+//		r.CpuUsage = cpuUsage
+//		r.CpuLimit = cpuLimit
+//		r.CpuUsagePercentage = cpuUsagePercentage
+//		r.PodCount = int64(podCount)
+//		r.AvgCpu = avgCpuUsage
+//		r.StatementOps = statementOps
+//		r.P99Latency = p99Latency
 type Result struct {
 	Time               int64
 	CpuUsage           float32
 	CpuLimit           float32
-	AvgCpu             float32
 	CpuUsagePercentage float32
 	PodCount           int64
+	AvgCpu             float32
+	StatementOps       float32
+	P99Latency         float32
 }
 
 func WriteOutputs(resArr []Result) {
@@ -30,7 +40,7 @@ func WriteOutputs(resArr []Result) {
 		return
 	}
 	defer dstFile.Close()
-	header := "time,cpuUsage, cpuLimit, avgCpu,podCount\n"
+	header := "Time, CpuUsage, CpuLimit, CpuUsagePercentage, PodCount, AvgCpu, StatementOps, P99Latency \n"
 	dstFile.WriteString(header)
 	//dstFile.WriteString("time ")
 	//dstFile.WriteString("avgCpu ")
@@ -44,11 +54,15 @@ func WriteOutputs(resArr []Result) {
 		bt.WriteString(",")
 		bt.WriteString(strconv.FormatFloat(float64(val.CpuLimit), 'f', 6, 32))
 		bt.WriteString(",")
-		bt.WriteString(strconv.FormatFloat(float64(val.AvgCpu), 'f', 6, 32))
-		bt.WriteString(",")
 		bt.WriteString(strconv.FormatFloat(float64(val.CpuUsagePercentage), 'f', 6, 32))
 		bt.WriteString(",")
 		bt.WriteString(strconv.FormatInt(val.PodCount, 10))
+		bt.WriteString(",")
+		bt.WriteString(strconv.FormatFloat(float64(val.AvgCpu), 'f', 6, 32))
+		bt.WriteString(",")
+		bt.WriteString(strconv.FormatFloat(float64(val.StatementOps), 'f', 6, 32))
+		bt.WriteString(",")
+		bt.WriteString(strconv.FormatFloat(float64(val.P99Latency), 'f', 6, 32))
 		bt.WriteString("\n")
 		dstFile.WriteString(bt.String())
 	}

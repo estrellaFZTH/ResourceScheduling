@@ -26,10 +26,3 @@ const (
 	//ReplicaSmallCpuUsage         = "sum(rate(container_cpu_usage_seconds_total{pod=~\"%s-replicas-small-.*\", image!=\"\", container!=\"POD\"}[1m]))  / sum(cluster:namespace:pod_cpu:active:kube_pod_container_resource_limits{pod=~\"%s-replicas-small-.*\"})*100"
 	//ReplicaMidCpuUsage           = "sum(rate(container_cpu_usage_seconds_total{pod=~\"%s-replicas-mid-.*\", image!=\"\", container!=\"POD\"}[1m]))  / sum(cluster:namespace:pod_cpu:active:kube_pod_container_resource_limits{pod=~\"%s-replicas-mid-.*\"})*100"
 )
-
-//const (
-//	//PodCpuUsage        = "sum(rate(container_cpu_usage_seconds_total{pod=~\"%s.*\"}[1m])) by (pod)*100"
-//	//PodMemoryUsage     = "sum(container_memory_rss{pod=~\"%s.*\"}) by(pod)"
-//	ReplicaAvgCpuUsage = "avg(rate(container_cpu_usage_seconds_total{namespace=\"polardb\",container=~\"%s.*\"}[1m]))*100"
-//	QueryReplicaCount  = "count(container_cpu_usage_seconds_total{namespace=\"polardb\",container=\"%s\"})"
-//)
