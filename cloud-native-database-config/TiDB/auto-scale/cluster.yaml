@@ -1,0 +1,71 @@
+apiVersion: pingcap.com/v1alpha1
+kind: TidbCluster
+metadata:
+  name: auto-scaling-demo
+  namespace: tidb-cluster
+spec:
+  # ** Basic Configuration **
+  #   # TiDB cluster version
+  version: "v6.5.0"
+  # Time zone of TiDB cluster Pods
+  timezone: UTC
+  configUpdateStrategy: RollingUpdate
+  hostNetwork: false
+  imagePullPolicy: IfNotPresent
+  enableDynamicConfiguration: true
+  pd:
+    baseImage: pingcap/pd
+    replicas: 3
+    requests:
+      cpu: "50m"
+      memory: 50Mi
+      storage: 50Mi
+    limits:
+      cpu: "6000m"
+      memory: 20Gi
+    config: |
+      lease = 3
+      enable-prevote = true
+    storageClassName: "tidb-shared-storage"
+    mountClusterClientSecret: true
+  tidb:
+    baseImage: pingcap/tidb
+    config: |
+      split-table = true
+      oom-action = "log"
+    replicas: 3
+    requests:
+      cpu: "50m"
+      memory: 50Mi
+      storage: 10Gi
+    limits:
+      cpu: "8000m"
+      memory: 40Gi
+    storageClassName: "tidb-shared-storage"
+    service:
+      type: ClusterIP
+    # service:
+    #   type: NodePort
+    #   mysqlNodePort: 30002
+    #   statusNodePort: 30080
+  tikv:
+    baseImage: pingcap/tikv
+    config: |
+      [storage]
+        [storage.block-cache]
+          capacity = "8GB"
+    replicas: 3
+    requests:
+      cpu: "50m"
+      memory: 50Mi
+      storage: 100Gi
+    limits:
+      cpu: "12000m"
+      memory: 40Gi
+    storageClassName: "tidb-shared-storage"
+    mountClusterClientSecret: true
+  enablePVReclaim: false
+  pvReclaimPolicy: Delete
+
+  tlsCluster: {}
+

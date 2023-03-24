@@ -1,0 +1,24 @@
+#server:
+#  ip: 127.0.0.1
+#  port: 80
+
+mysql: 8
+#  UserName:
+#    Data: xy
+#  PassWord: 123456
+#  DataBase: mydb
+#  Host: 127.0.0.1
+#  Port: 3306
+#  TimeOut: 1.2
+
+#app: myApp
+#mode: dev
+#enable: true
+#port: 8080
+#timeout: 0.3
+#
+#hotwords:
+#  - docker
+#  - golang
+#  - python
+
