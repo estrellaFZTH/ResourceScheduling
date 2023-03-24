@@ -124,3 +124,13 @@ func QueryPodCountSelect(podPrefix string, client *prometheus.API) (model.Value,
 	value, _, err := (*client).Query(context.TODO(), fmt.Sprintf(PodCount, podPrefix), time.Now())
 	return value, err
 }
+
+func QueryP99LatencyInFiveMin(cluster string, client *prometheus.API) (model.Value, error) {
+	var r = prometheus.Range{
+		Start: time.Now().Add(-time.Minute * 5), // 5分钟前
+		End:   time.Now(),                       // 当前时间
+		Step:  time.Second * 1,
+	}
+	value, _, err := (*client).QueryRange(context.TODO(), TiDBP99Latency, r)
+	return value, err
+}

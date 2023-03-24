@@ -13,6 +13,8 @@ const (
 	NameSpace   = "tidb-cluster"
 	ClusterName = "basic"
 
+	TiDBScaleTime = 180 * time.Second
+
 	MaxScalePodCount = 6
 	MinScalePodCount = 3
 

@@ -3,13 +3,13 @@ package scheduling
 import (
 	"ResourceScheduling/cmd/collector"
 	"ResourceScheduling/global"
+	"ResourceScheduling/internal/model"
 	"ResourceScheduling/internal/scale"
 	"log"
 	"time"
 )
 
 func SmartSchedule() {
-
 	log.Printf("SmartSchedule...")
 	t := time.Tick(global.ScalingInterval)
 	var lastScaleOut = time.Now().Unix()
@@ -33,9 +33,24 @@ func SmartSchedule() {
 		p99Latency := tidbMetrics[1]
 		log.Printf("tps: %s, p99Latency: %s.", tps, p99Latency)
 
-		// Input [tps, p99Latency, avgCpuUsage, avgCpuGradient, podCount, TiDBScaleTime]
+		//	Tps            float32
+		//	P99Latency     float32
+		//	AvgCpuUsage    float32
+		//	AvgCpuGradient float32
+		//	PodCount       float32
+		//	TiDBScaleTime  float32
+		var inPut = model.InPut{}
+		inPut.Tps = tps
+		inPut.P99Latency = p99Latency
+		inPut.AvgCpuUsage = avgCpuUsage
+		inPut.PodCount = podCount
+		inPut.TiDBScaleTime = float32(global.TiDBScaleTime)
+
+		// (暂定)Input [tps, p99Latency, avgCpuUsage, avgCpuGradient, podCount, TiDBScaleTime]
 		// AI Model
+		outPut := model.AIModel(inPut)
 		// Output [max_threshold, min_threshold, ScaleOutPodCount, ScaleInPodCount]
+		log.Printf("outPut: %s", outPut)
 
 		if avgCpuUsage >= global.MaxThreshold && podCount <= global.MaxScalePodCount {
 			var now = time.Now().Unix()

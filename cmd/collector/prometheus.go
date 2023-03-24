@@ -4,6 +4,7 @@ import (
 	"ResourceScheduling/global"
 	"ResourceScheduling/internal/collector"
 	"ResourceScheduling/internal/utils"
+	"github.com/prometheus/common/model"
 	"log"
 	"time"
 )
@@ -221,6 +222,13 @@ func GetTpSAndLatency() []float32 {
 	return res
 }
 
-func GetCurrentThreshold() {
+func GetP99LatencyInFiveMin() model.Value {
+	_, queryClientTiDB, err := collector.GetPrometheusClient(global.TiDBPrometheusAddress)
+	if err != nil {
+		log.Fatalf("Cannot connect to TiDBPrometheus: %s, %s", global.TiDBPrometheusAddress, err.Error())
+		return nil
+	}
 
+	result, _ := collector.QueryP99LatencyInFiveMin("basic-tidb", queryClientTiDB)
+	return result
 }
